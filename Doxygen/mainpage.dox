@@ -1,0 +1,161 @@
+/**
+
+\mainpage StompDisk
+
+## 1. Introduction
+
+When you delete a file under Windows, the file data on disk doesn't get
+deleted, just the pointers that Windows uses to access the file.
+The data is still there, but its location on the disk
+has been added to a _free-list_
+of disk space available to be over-written by other files.
+Until that disk space is actually over-written by another file,
+a moderately competent hacker with access to your old disk drive
+could potentially reconstruct your files. This means that
+before you sell, give away, or throw out your old computer or your old disk drive,
+it's a good idea to over-write as much of the data on the disc as you can with something innocuous,
+such as all zeros (note that I mean the zero byte `0x00`, not the zero
+character `0x30`).
+
+The obvious way to create a large file of zero bytes in `C++` 
+under Windows might start with these `#include`s: 
+
+<pre style='color:#000020;background:#f6f8ff;'><span style='color:#004a43; '>#</span><span style='color:#004a43; '>include </span><span style='color:#800000; '>&lt;</span><span style='color:#40015a; '>cstdint</span><span style='color:#800000; '>></span>
+<span style='color:#004a43; '>#</span><span style='color:#004a43; '>include </span><span style='color:#800000; '>&lt;</span><span style='color:#40015a; '>cstdio</span><span style='color:#800000; '>></span>
+<span style='color:#004a43; '>#</span><span style='color:#004a43; '>include </span><span style='color:#800000; '>\"</span><span style='color:#40015a; '>Windows.h</span><span style='color:#800000; '>\"</span>
+</pre>
+<!--Created using ToHtml.com on 2022-06-07 20:27:05 UTC -->
+
+Create a byte buffer `pBuffer` of size `nSize` some multiple
+of the disk block size (we'll use `1073741824`, which is 1GB,  in this example):
+
+<pre style='color:#000020;background:#f6f8ff;'><span style='color:#200080; font-weight:bold; '>const</span> uint64_t nSize <span style='color:#308080; '>=</span> <span style='color:#008c00; '>1073741824</span><span style='color:#406080; '>;</span> <span style='color:#595979; '>//buffer size</span>
+uint8_t<span style='color:#308080; '>*</span> pBuffer <span style='color:#308080; '>=</span> new uint8_t<span style='color:#308080; '>[</span>nSize<span style='color:#308080; '>]</span><span style='color:#406080; '>;</span> <span style='color:#595979; '>//buffer</span>
+</pre>
+<!--Created using ToHtml.com on 2022-06-07 20:22:40 UTC -->
+
+Fill it with zeros using the Windows API function `ZeroMemory`:
+
+<pre style='color:#000020;background:#f6f8ff;'><span style='color:#400000; '>ZeroMemory</span><span style='color:#308080; '>(</span><span style='color:#308080; '>&amp;</span>pBuffer<span style='color:#308080; '>,</span> nSize<span style='color:#308080; '>)</span><span style='color:#406080; '>;</span> <span style='color:#595979; '>//fill buffer with zeros</span>
+</pre>
+<!--Created using ToHtml.com on 2022-06-07 20:24:08 UTC -->
+
+Output it to a file `stomp0.bin` in one chunk using the `stdio` function `fwrite`:
+
+<pre style='color:#000020;background:#f6f8ff;'><span style='color:#003060; '>FILE</span><span style='color:#308080; '>*</span> pFile <span style='color:#308080; '>=</span> <span style='color:#003060; '>fopen</span><span style='color:#308080; '>(</span><span style='color:#800000; '>\"</span><span style='color:#1060b6; '>stomp0.bin</span><span style='color:#800000; '>\"</span><span style='color:#308080; '>,</span> <span style='color:#800000; '>\"</span><span style='color:#1060b6; '>wb</span><span style='color:#800000; '>\"</span><span style='color:#308080; '>)</span><span style='color:#406080; '>;</span> <span style='color:#595979; '>//open output file</span>
+
+<span style='color:#200080; font-weight:bold; '>if</span><span style='color:#308080; '>(</span>pFile<span style='color:#308080; '>)</span><span style='color:#406080; '>{</span> <span style='color:#595979; '>//open file successful</span>
+  <span style='color:#003060; '>fwrite</span><span style='color:#308080; '>(</span>pBuffer<span style='color:#308080; '>,</span> <span style='color:#200080; font-weight:bold; '>sizeof</span><span style='color:#308080; '>(</span>uint8_t<span style='color:#308080; '>)</span><span style='color:#308080; '>,</span> nSize<span style='color:#308080; '>,</span> pFile<span style='color:#308080; '>)</span><span style='color:#406080; '>;</span> <span style='color:#595979; '>//write zeros</span>
+  <span style='color:#003060; '>fclose</span><span style='color:#308080; '>(</span>pFile<span style='color:#308080; '>)</span><span style='color:#406080; '>;</span> <span style='color:#595979; '>//close file</span>
+<span style='color:#406080; '>}</span> <span style='color:#595979; '>//if</span>
+</pre>
+<!--Created using ToHtml.com on 2022-06-07 20:24:55 UTC -->
+
+Remember to clean up afterwards:
+
+<pre style='color:#000020;background:#f6f8ff;'>delete [] pBuffer<span style='color:#406080; '>;</span>
+</pre>
+<!--Created using ToHtml.com on 2022-06-07 20:32:23 UTC -->
+
+The above code is pretty much cross-platform (meaning that you could probably get it to
+compile with `g++` under a `*NIX` variant with some small changes such as replacing the call to
+`ZeroMemory` with a `memset`), but it has
+a major drawback.
+It is horribly, unecessarily, and annoyingly slow,
+even if you have a reasonably recent computer with oodles of memory and a solid state drive.
+There are many things you can try such as optimizing the block size and writing
+consecutive blocks of zeros by putting the `fwrite` line into a `for`-loop,
+but it will remain slow despite your efforts because
+there's no way to get around the fact that you are moving large blocks
+of data from memory over the bus to the disk drive.
+Or is there?
+Actually, there is a much faster way to create a large file of zeros under Windows
+as follows.
+
+<pre style='color:#000020;background:#f6f8ff;'><span style='color:#003060; '>LARGE_INTEGER</span> nSize<span style='color:#406080; '>;</span> <span style='color:#595979; '>//thanks for being weird, Microsoft</span>
+nSize<span style='color:#308080; '>.</span>QuadPart <span style='color:#308080; '>=</span> <span style='color:#008c00; '>1073741824</span><span style='color:#406080; '>;</span> 
+ 
+<span style='color:#200080; font-weight:bold; '>const</span> <span style='color:#003060; '>HANDLE</span> hFile <span style='color:#308080; '>=</span> <span style='color:#400000; '>CreateFile</span><span style='color:#308080; '>(</span><span style='color:#800000; '>L\"</span><span style='color:#1060b6; '>stomp0.bin</span><span style='color:#800000; '>\"</span><span style='color:#308080; '>,</span> <span style='color:#7d0045; '>GENERIC_WRITE</span><span style='color:#308080; '>,</span>
+  FILE_SHARE_WRITE<span style='color:#308080; '>,</span> <span style='color:#7d0045; '>NULL</span><span style='color:#308080; '>,</span> <span style='color:#7d0045; '>CREATE_ALWAYS</span><span style='color:#308080; '>,</span> FILE_ATTRIBUTE_NORMAL<span style='color:#308080; '>,</span> <span style='color:#7d0045; '>NULL</span><span style='color:#308080; '>)</span><span style='color:#406080; '>;</span>
+
+<span style='color:#200080; font-weight:bold; '>if</span><span style='color:#308080; '>(</span><span style='color:#003060; '>SUCCEEDED</span><span style='color:#308080; '>(</span>dwErr<span style='color:#308080; '>)</span><span style='color:#308080; '>)</span><span style='color:#406080; '>{</span> <span style='color:#595979; '>//file has been opened, hFile is valid</span>
+  SetFilePointerEx<span style='color:#308080; '>(</span>hFile<span style='color:#308080; '>,</span> nSize<span style='color:#308080; '>,</span> <span style='color:#008c00; '>0</span><span style='color:#308080; '>,</span> FILE_BEGIN<span style='color:#308080; '>)</span><span style='color:#406080; '>;</span> <span style='color:#595979; '>//set file ptr to start of file</span>
+  <span style='color:#400000; '>SetEndOfFile</span><span style='color:#308080; '>(</span>hFile<span style='color:#308080; '>)</span><span style='color:#406080; '>;</span> <span style='color:#595979; '>//set end of file</span>
+  <span style='color:#400000; '>CloseHandle</span><span style='color:#308080; '>(</span>hFile<span style='color:#308080; '>)</span><span style='color:#406080; '>;</span> <span style='color:#595979; '>//close handle</span>
+<span style='color:#406080; '>}</span> <span style='color:#595979; '>//if</span>
+</pre>
+<!--Created using ToHtml.com on 2022-06-07 20:43:05 UTC -->
+
+Notice that there is no buffer of zeros and no moving large chunks of data.
+The zero-ing out of the data on disk is apparently carried out by the
+call to the Windows API function `SetFilePointerEx`.
+You'll find this code in function Stomp(). 
+The rest of the code in Main.cpp is just I/O,
+prettifying, and error-checking.
+
+## 2. Compiling the Code
+
+A Visual Studio solution file `stompdisk.sln` has been provided in the root folder. It has been tested with Visual Studio 2019 Community under Windows 10.
+
+## 3. Using the Code
+
+`StompDisk` compiles to a Windows Console program that prompts for the file size in GB (Gigabytes)
+and the number of files to create.
+The files will be named `stomp0.bin`, `stomp1.bin`, `stomp2.bin`, etc.
+If you already have some files named `stomp*.bin` in the current
+folder, then they will not be over-written. The \ref fig1 "Fig. 1" below shows a screen shot.
+
+\anchor fig1
+\image html sshot.png "Fig. 1: Screen shot of StompDisk." width=40%
+
+It is _strongly recommended_ that you do not open any of the `stomp*.bin`
+files in a text editor such as `Notepad` or `Notepad++` unless you
+are willing to wait a very, very long time for it to load.
+If you want to check one of the output files to see that it contains zeros,
+I suggest that you use
+the free hex editor [HxD](https://mh-nexus.de/en/hxd/).
+For example, \ref fig2 "Fig. 2" shows `stomp0.bin` open in 
+[HxD](https://mh-nexus.de/en/hxd/).
+
+\anchor fig2
+\image html hxd.png "Fig. 2: Screen shot of HxD." width=50%
+
+
+### Before Disposing of Your Disk Drive or Computer
+
+Before you dispose of your disk drive or computer,
+you should of course delete all of your files from the usual places
+such as the `Documents` and `Pictures` folders.
+The best way to delete them is to select them in Windows Explorer
+and press `Shift+Delete`. Note that these files cannot be undeleted, so make
+sure that you do _really_ want to do this. You should also
+uninstall any unnecessary programs
+that may be caching data,
+clear all browser cookies and downloaded files, and 
+empty the trash.
+
+Once you are sure that you have deleted everything that can be deleted,
+use `StompDisk` to create a collection of progressively smaller files
+until your disk drive shows up as nearly full.
+If you choose to do this, be aware that Windows tends to get increasing
+slow and tetchy as its main drive gets close to 100 percent usage.
+After, and only after,
+you have created enough `stomp*.bin` files to fill the disk you should delete them all,
+again preferably
+using `Shift+Delete`. Your unused disk space should now mostly consist of zeros.
+
+<span style="color: red;">
+Important Note: `StompDisk` is not guaranteed to over-write absolutely all
+of your data. There may still be fragments of deleted files remaining depending on a
+number of factors including the
+sizes of the files that are still on your disk. 
+If you are considering using `StompDisk` to cover up evidence of
+illegal activity, then don't.
+In any case you should read the
+[license](http://github.com/Ian-Parberry/stompdisk/blob/main/LICENSE)
+before the thought of using `StompDisk` even considers the
+possibility of crossing your mind.
+
+</span>
+
+**/
