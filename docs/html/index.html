@@ -106,22 +106,33 @@ nSize<span style="color:#308080; ">.</span>QuadPart <span style="color:#308080; 
   <span style="color:#400000; ">SetEndOfFile</span><span style="color:#308080; ">(</span>hFile<span style="color:#308080; ">)</span><span style="color:#406080; ">;</span> <span style="color:#595979; ">//set end of file</span>
   <span style="color:#400000; ">CloseHandle</span><span style="color:#308080; ">(</span>hFile<span style="color:#308080; ">)</span><span style="color:#406080; ">;</span> <span style="color:#595979; ">//close handle</span>
 <span style="color:#406080; ">}</span> <span style="color:#595979; ">//if</span>
-</pre><p >Notice that there is no buffer of zeros and no moving large chunks of data. The zero-ing out of the data on disk is apparently carried out by the call to the Windows API function <code>SetFilePointerEx</code>. You'll find this code in function <a class="el" href="_main_8cpp.html#ae7a7e7f545dc3168da5ec3be08abcac0" title="Create files of zeros.">Stomp()</a>. The rest of the code in <a class="el" href="_main_8cpp.html" title="The only code file.">Main.cpp</a> is just I/O, prettifying, and error-checking.</p>
+</pre><p >Notice that there is no buffer of zeros and no moving large chunks of data. The zero-ing out of the data on disk is apparently carried out by the call to the Windows API function <code>SetFilePointerEx</code>. You'll find this code in function <a class="el" href="_main_8cpp.html#a7fabb349fef76b7b134246afe1233479" title="Create files of zeros.">Stomp()</a>. The rest of the code in <a class="el" href="_main_8cpp.html" title="The only code file.">Main.cpp</a> is just I/O, prettifying, and error-checking.</p>
 <h2>2. Compiling the Code</h2>
 <p >A Visual Studio solution file <code>stompdisk.sln</code> has been provided in the root folder. It has been tested with Visual Studio 2019 Community under Windows 10.</p>
 <h2>3. Using the Code</h2>
-<p ><code>StompDisk</code> compiles to a Windows Console program that prompts for the file size in GB (Gigabytes) and the number of files to create. The files will be named <code>stomp0.bin</code>, <code>stomp1.bin</code>, <code>stomp2.bin</code>, etc. If you already have some files named <code>stomp*.bin</code> in the current folder, then they will not be over-written. The <a class="el" href="index.html#fig1">Fig. 1</a> below shows a screen shot.</p>
+<p ><code>StompDisk</code> compiles to a Windows Console program that prompts for the file size in GB (Gigabytes) and then creates a file of zeros of that size. The files will be named <code>stomp0.bin</code>, <code>stomp1.bin</code>, <code>stomp2.bin</code>, etc. If you already have some files named <code>stomp*.bin</code> in the current folder, then they will not be over-written. The <a class="el" href="index.html#fig1">Fig. 1</a> below shows a screen shot.</p>
 <p ><a class="anchor" id="fig1"></a></p><div class="image">
 <img src="sshot.png" alt="" width="40%"/>
 <div class="caption">
 Fig. 1: Screen shot of StompDisk.</div></div>
-<p >It is <em>strongly recommended</em> that you do not open any of the <code>stomp*.bin</code> files in a text editor such as <code>Notepad</code> or <code>Notepad++</code> unless you are willing to wait a very, very long time for it to load. If you want to check one of the output files to see that it contains zeros, I suggest that you use the free hex editor <a href="https://mh-nexus.de/en/hxd/">HxD</a>. For example, <a class="el" href="index.html#fig2">Fig. 2</a> shows <code>stomp0.bin</code> open in <a href="https://mh-nexus.de/en/hxd/">HxD</a>.</p>
+<p >However, there are cases in which Windows reports no error but the file created has zero bytes, in particular, if you ask for a file size larger than the available space on the disk. To guard against this, <code>stompdisk</code> will notify you when the created file does not have the size that you asked for, for example, <a class="el" href="index.html#fig2">Fig. 2</a> shows the output of <code>stompdisk</code> when you ask for a file of size 1TB when the disk is smaller than that.</p>
 <p ><a class="anchor" id="fig2"></a></p><div class="image">
+<img src="sshot2.png" alt="" width="40%"/>
+<div class="caption">
+Fig. 2: Screen shot of StompDisk if you over-ask.</div></div>
+<p >It is <em>strongly recommended</em> that you do not open any of the <code>stomp*.bin</code> files in a text editor such as <code>Notepad</code> or <code>Notepad++</code> unless you are willing to wait a very, very long time for it to load. If you want to check one of the output files to see that it contains zeros, I suggest that you use the free hex editor <a href="https://mh-nexus.de/en/hxd/">HxD</a>. For example, <a class="el" href="index.html#fig3">Fig. 3</a> shows <code>stomp0.bin</code> open in <a href="https://mh-nexus.de/en/hxd/">HxD</a>.</p>
+<p ><a class="anchor" id="fig3"></a></p><div class="image">
 <img src="hxd.png" alt="" width="50%"/>
 <div class="caption">
-Fig. 2: Screen shot of HxD.</div></div>
+Fig. 3: Screen shot of HxD.</div></div>
 <h3>Before Disposing of Your Disk Drive or Computer</h3>
 <p >Before you dispose of your disk drive or computer, you should of course delete all of your files from the usual places such as the <code>Documents</code> and <code>Pictures</code> folders. The best way to delete them is to select them in Windows Explorer and press <code>Shift+Delete</code>. Note that these files cannot be undeleted, so make sure that you do <em>really</em> want to do this. You should also uninstall any unnecessary programs that may be caching data, clear all browser cookies and downloaded files, and empty the trash.</p>
+<p >Unfortunately, Windows is very, very slow at deleting a large number of files because it insists on enumerating them and reporting to the user first. It is much faster to use the batch file <code>fastdelete.bat</code> included at the root of this repository. Simply copy it to the folder above the one you want to delete, double-click on the <code>fastdelete.bat</code> icon (see <a class="el" href="index.html#fig4">Fig. 4</a>), and type in the name of the folder that you want to delete when prompted (in <a class="el" href="index.html#fig4">Fig. 4</a> that would be the folder <code>Delete Me</code>). The contents of <code>fastdelete.bat</code> are as follows:</p>
+<p ><a href="https://github.com/Ian-Parberry/stompdisk/blob/a76397f792715d5f9aa203c319b7312ef2874ce8/fastdelete.bat#L1-L14">https://github.com/Ian-Parberry/stompdisk/blob/a76397f792715d5f9aa203c319b7312ef2874ce8/fastdelete.bat#L1-L14</a></p>
+<p ><a class="anchor" id="fig4"></a></p><div class="image">
+<img src="deleteme.png" alt="" width="40%"/>
+<div class="caption">
+Fig. 4: Folder containing the fast delete batch file.</div></div>
 <p >Once you are sure that you have deleted everything that can be deleted, use <code>StompDisk</code> to create a collection of progressively smaller files until your disk drive shows up as nearly full. If you choose to do this, be aware that Windows tends to get increasing slow and tetchy as its main drive gets close to 100 percent usage. After, and only after, you have created enough <code>stomp*.bin</code> files to fill the disk you should delete them all, again preferably using <code>Shift+Delete</code>. Your unused disk space should now mostly consist of zeros.</p>
 <p ><span style="color: red;"> Important Note: <code>StompDisk</code> is not guaranteed to over-write absolutely all of your data. There may still be fragments of deleted files remaining depending on a number of factors including the sizes of the files that are still on your disk. If you are considering using <code>StompDisk</code> to cover up evidence of illegal activity, then don't. In any case you should read the <a href="http://github.com/Ian-Parberry/stompdisk/blob/main/LICENSE">license</a> before the thought of using <code>StompDisk</code> even considers the possibility of crossing your mind.</span></p>
 <p ><span style="color: red;"></span> </p>
@@ -129,7 +140,7 @@ Fig. 2: Screen shot of HxD.</div></div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jun 7 2022 18:12:41 for StompDisk by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Mon Jun 13 2022 18:22:03 for StompDisk by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

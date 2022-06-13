@@ -100,7 +100,7 @@ A Visual Studio solution file `stompdisk.sln` has been provided in the root fold
 ## 3. Using the Code
 
 `StompDisk` compiles to a Windows Console program that prompts for the file size in GB (Gigabytes)
-and the number of files to create.
+and then creates a file of zeros of that size.
 The files will be named `stomp0.bin`, `stomp1.bin`, `stomp2.bin`, etc.
 If you already have some files named `stomp*.bin` in the current
 folder, then they will not be over-written. The \ref fig1 "Fig. 1" below shows a screen shot.
@@ -108,18 +108,27 @@ folder, then they will not be over-written. The \ref fig1 "Fig. 1" below shows a
 \anchor fig1
 \image html sshot.png "Fig. 1: Screen shot of StompDisk." width=40%
 
+However, there are cases in which Windows reports no error but the file
+created has zero bytes, in particular, if you ask for a file size larger than the available space on
+the disk. To guard against this, `stompdisk` will notify you when the created file
+does not have the size that you asked for, 
+for example, \ref fig2 "Fig. 2" shows the output of `stompdisk` when you ask for a
+file of size 1TB when the disk is smaller than that.
+
+\anchor fig2
+\image html sshot2.png "Fig. 2: Screen shot of StompDisk if you over-ask." width=40%
+
 It is _strongly recommended_ that you do not open any of the `stomp*.bin`
 files in a text editor such as `Notepad` or `Notepad++` unless you
 are willing to wait a very, very long time for it to load.
 If you want to check one of the output files to see that it contains zeros,
 I suggest that you use
 the free hex editor [HxD](https://mh-nexus.de/en/hxd/).
-For example, \ref fig2 "Fig. 2" shows `stomp0.bin` open in 
+For example, \ref fig3 "Fig. 3" shows `stomp0.bin` open in 
 [HxD](https://mh-nexus.de/en/hxd/).
 
-\anchor fig2
-\image html hxd.png "Fig. 2: Screen shot of HxD." width=50%
-
+\anchor fig3
+\image html hxd.png "Fig. 3: Screen shot of HxD." width=50%
 
 ### Before Disposing of Your Disk Drive or Computer
 
@@ -133,6 +142,21 @@ uninstall any unnecessary programs
 that may be caching data,
 clear all browser cookies and downloaded files, and 
 empty the trash.
+
+Unfortunately, Windows is very, very slow at deleting a large number of files
+because it insists on enumerating them and reporting to the user first.
+It is much faster to use the batch file `fastdelete.bat` included at
+the root of this repository. Simply copy it to the folder above
+the one you want to delete, double-click on the `fastdelete.bat` icon
+(see \ref fig4 "Fig. 4"),
+and type in the name of the folder that you want to delete when prompted
+(in \ref fig4 "Fig. 4" that would be the folder `Delete Me`).
+The contents of `fastdelete.bat` are as follows:
+
+https://github.com/Ian-Parberry/stompdisk/blob/a76397f792715d5f9aa203c319b7312ef2874ce8/fastdelete.bat#L1-L14
+
+\anchor fig4
+\image html deleteme.png "Fig. 4: Folder containing the fast delete batch file." width=40%
 
 Once you are sure that you have deleted everything that can be deleted,
 use `StompDisk` to create a collection of progressively smaller files

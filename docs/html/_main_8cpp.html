@@ -105,9 +105,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a989d37d6482ecfdc74ce1620eacff1fa"><td class="memItemLeft" align="right" valign="top">std::wstring&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_main_8cpp.html#a989d37d6482ecfdc74ce1620eacff1fa">GetErrorString</a> (const DWORD dw)</td></tr>
 <tr class="memdesc:a989d37d6482ecfdc74ce1620eacff1fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get error string.  <a href="_main_8cpp.html#a989d37d6482ecfdc74ce1620eacff1fa">More...</a><br /></td></tr>
 <tr class="separator:a989d37d6482ecfdc74ce1620eacff1fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae7a7e7f545dc3168da5ec3be08abcac0"><td class="memItemLeft" align="right" valign="top">DWORD&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_main_8cpp.html#ae7a7e7f545dc3168da5ec3be08abcac0">Stomp</a> (const uint64_t m, const uint64_t n)</td></tr>
-<tr class="memdesc:ae7a7e7f545dc3168da5ec3be08abcac0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create files of zeros.  <a href="_main_8cpp.html#ae7a7e7f545dc3168da5ec3be08abcac0">More...</a><br /></td></tr>
-<tr class="separator:ae7a7e7f545dc3168da5ec3be08abcac0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7fabb349fef76b7b134246afe1233479"><td class="memItemLeft" align="right" valign="top">DWORD&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_main_8cpp.html#a7fabb349fef76b7b134246afe1233479">Stomp</a> (const uint64_t nWanted, uint64_t &amp;nCreated, std::wstring &amp;wstrFile)</td></tr>
+<tr class="memdesc:a7fabb349fef76b7b134246afe1233479"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create files of zeros.  <a href="_main_8cpp.html#a7fabb349fef76b7b134246afe1233479">More...</a><br /></td></tr>
+<tr class="separator:a7fabb349fef76b7b134246afe1233479"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae66f6b31b5ad750f1fe042a706a4e3d4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_main_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a> ()</td></tr>
 <tr class="memdesc:ae66f6b31b5ad750f1fe042a706a4e3d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Main.  <a href="_main_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">More...</a><br /></td></tr>
 <tr class="separator:ae66f6b31b5ad750f1fe042a706a4e3d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -245,9 +245,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p >Get number of files and file size from user and create the files. Print an error string if something went wrong and a cheerful message otherwise. </p><dl class="section return"><dt>Returns</dt><dd>0 (What could possibly go wrong?) </dd></dl>
+<p >Get number of files and file size from user and create the files. Print an error string if something went wrong. </p><dl class="section return"><dt>Returns</dt><dd>0 (What could possibly go wrong?) </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_main_8cpp_source.html#l00132">132</a> of file <a class="el" href="_main_8cpp_source.html">Main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_main_8cpp_source.html#l00134">134</a> of file <a class="el" href="_main_8cpp_source.html">Main.cpp</a>.</p>
 
 </div>
 </div>
@@ -278,8 +278,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ae7a7e7f545dc3168da5ec3be08abcac0" name="ae7a7e7f545dc3168da5ec3be08abcac0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae7a7e7f545dc3168da5ec3be08abcac0">&#9670;&nbsp;</a></span>Stomp()</h2>
+<a id="a7fabb349fef76b7b134246afe1233479" name="a7fabb349fef76b7b134246afe1233479"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7fabb349fef76b7b134246afe1233479">&#9670;&nbsp;</a></span>Stomp()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -288,13 +288,19 @@ Functions</h2></td></tr>
           <td class="memname">DWORD Stomp </td>
           <td>(</td>
           <td class="paramtype">const uint64_t&#160;</td>
-          <td class="paramname"><em>m</em>, </td>
+          <td class="paramname"><em>nWanted</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const uint64_t&#160;</td>
-          <td class="paramname"><em>n</em>&#160;</td>
+          <td class="paramtype">uint64_t &amp;&#160;</td>
+          <td class="paramname"><em>nCreated</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::wstring &amp;&#160;</td>
+          <td class="paramname"><em>wstrFile</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -303,23 +309,24 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p >Create large files filled with zeros super-fast under Windows. </p><dl class="params"><dt>Parameters</dt><dd>
+<p >Create large file filled with zeros super-fast under Windows. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">m</td><td>Number of files. </td></tr>
-    <tr><td class="paramname">n</td><td>Number of GB per file. </td></tr>
+    <tr><td class="paramname">nWanted</td><td>[in] Number of GB wanted. </td></tr>
+    <tr><td class="paramname">nCreated</td><td>[out] Number of GB actually created. </td></tr>
+    <tr><td class="paramname">wstrFile</td><td>[out] Name of file created. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>DWORD error code, zero if no error </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>DWORD error code, zero if no error. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_main_8cpp_source.html#l00096">96</a> of file <a class="el" href="_main_8cpp_source.html">Main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_main_8cpp_source.html#l00097">97</a> of file <a class="el" href="_main_8cpp_source.html">Main.cpp</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jun 7 2022 18:12:41 for StompDisk by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Mon Jun 13 2022 18:22:03 for StompDisk by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>
