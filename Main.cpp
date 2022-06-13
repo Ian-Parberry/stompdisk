@@ -58,12 +58,12 @@ bool IsNumericString(const std::wstring& s){
 uint64_t ReadNumber(std::wstring wstrBanner){
   std::wcout << wstrBanner << std::endl << "> ";
 
-  uint64_t n = 0;
-  std::wstring wstr;
-  std::getline(std::wcin, wstr);
+  uint64_t n = 0; //for the number
+  std::wstring wstr; //for the input line
+  std::getline(std::wcin, wstr); //input a line, hopefully with a number in it
 
-  if(IsNumericString(wstr))
-    n = std::stoull(wstr);
+  if(IsNumericString(wstr)) //if it's a number
+    n = std::stoull(wstr); //convert from string to uint64_t
 
   return n;
 } //ReadNumber
@@ -88,37 +88,39 @@ std::wstring GetErrorString(const DWORD dw){
 
 /// \brief Create files of zeros.
 ///
-/// Create large files filled with zeros super-fast under Windows.
-/// \param m Number of files.
-/// \param n Number of GB per file.
-/// \return DWORD error code, zero if no error
+/// Create large file filled with zeros super-fast under Windows.
+/// \param nWanted [in] Number of GB wanted.
+/// \param nCreated [out] Number of GB actually created.
+/// \param wstrFile [out] Name of file created.
+/// \return DWORD error code, zero if no error.
 
-DWORD Stomp(const uint64_t m, const uint64_t n){
+DWORD Stomp(const uint64_t nWanted, uint64_t& nCreated, std::wstring& wstrFile){
+  const uint64_t nBytesInGB = 1073741824; //bytes in a gigabyte
+  const uint64_t nBytes = nBytesInGB*nWanted; //convert GB to bytes
   LARGE_INTEGER nSize; //thanks for being weird, Microsoft
-  nSize.QuadPart = 1073741824*n; //convert to bytes
+  nSize.QuadPart = nBytes; //convert to bytes
   DWORD dwErr = 0; //error code, initially no error
   uint64_t nFileNum = 0; //number in file name
 
-  for(uint64_t i=0; i<m && SUCCEEDED(dwErr); i++){ //for each file
-    std::wstring wstrFileName; //for file name
-    GetNextFile(nFileNum, wstrFileName); //next file number and name
+  GetNextFile(nFileNum, wstrFile); //next file number and name
 
-    const HANDLE hFile = CreateFile(wstrFileName.c_str(), GENERIC_WRITE,
-      FILE_SHARE_WRITE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-    dwErr = GetLastError();
+  const HANDLE hFile = CreateFile(wstrFile.c_str(), GENERIC_WRITE,
+    FILE_SHARE_WRITE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+  dwErr = GetLastError(); //check for error
 
-    if(SUCCEEDED(dwErr)){ //file has been opened, hFile is valid
-      SetFilePointerEx(hFile, nSize, 0, FILE_BEGIN); //set file ptr to start of file
-      dwErr = GetLastError();
+  if(SUCCEEDED(dwErr)){ //file has been opened, hFile is valid
+    SetFilePointerEx(hFile, nSize, 0, FILE_BEGIN); //set file ptr to start
+    dwErr = GetLastError(); //check for error
 
-      if(SUCCEEDED(dwErr)){ //this should always succeed
-        SetEndOfFile(hFile); 
-        dwErr = GetLastError();
-      } //if
-
-      CloseHandle(hFile);
+    if(SUCCEEDED(dwErr)){ //no error
+      SetEndOfFile(hFile); 
+      dwErr = GetLastError(); //check for error
     } //if
-  } //for
+    GetFileSizeEx(hFile, &nSize); //read back file size
+    nCreated = nSize.QuadPart/nBytesInGB; //report back file size
+
+    CloseHandle(hFile); //close valid file handle
+  } //if
 
   return dwErr; //error code, zero if no error
 } //Stomp
@@ -126,34 +128,34 @@ DWORD Stomp(const uint64_t m, const uint64_t n){
 /// \brief Main.
 ///
 /// Get number of files and file size from user and create the files. Print
-/// an error string if something went wrong and a cheerful message otherwise.
+/// an error string if something went wrong.
 /// \return 0 (What could possibly go wrong?)
 
 int main(){
-  std::wcout << L"Create large files of zeros." << std::endl;
+  std::wcout << L"StompDisk: Create a large file of zeros very very fast.\n";
 
-  uint64_t m = 0; //number of files
-  uint64_t n = 0; //number of GB per file
+  uint64_t nWanted = 0; //number of GB wanted
+  uint64_t nCreated = 0; //number of GB in created file
+  std::wstring wstr; //for file name
 
-  //get values of m and n from user
+  while(nWanted == 0) //get nWanted from user
+    nWanted = ReadNumber(L"Enter file size in GB: ");
 
-  while(n == 0)
-    n = ReadNumber(L"Enter file size in GB: ");
+  const DWORD dwErr = Stomp(nWanted, nCreated, wstr); //create file
 
-  while(m == 0)
-    m = ReadNumber(L"Enter Number of files: ");
+  if(SUCCEEDED(dwErr)){ //no error reported, check size to be sure
+    std::wcout << L"Created " << nCreated << L" GB file " << wstr << std::endl;
+    
+    if(nCreated != nWanted)
+      std::wcout << L"Error: Something went wrong!" << std::endl;
+  } //if
 
-  //create files and report
-
-  const DWORD dwErr = Stomp(m, n);
-
-  if(SUCCEEDED(dwErr))
-    std::wcout << L"Created " << std::to_wstring(m) << 
-      L" files of size " << std::to_wstring(n) << L"GB" << std::endl;
-  else{
+  else{ //error report
     std::wcout << L"Error!" << std::endl;
     std::wcout << GetErrorString(dwErr);
-  } //else
+  } //if
 
-  return 0;
+  system("pause"); //wait for user
+
+  return 0; //what could possibly go wrong?
 } //main
