@@ -135,25 +135,21 @@ For example, \ref fig3 "Fig. 3" shows `stomp0.bin` open in
 Before you dispose of your disk drive or computer,
 you should of course delete all of your files from the usual places
 such as the `Documents` and `Pictures` folders.
-The best way to delete them is to select them in Windows Explorer
-and press `Shift+Delete`. Note that these files cannot be undeleted, so make
-sure that you do _really_ want to do this. You should also
+Unfortunately, Windows is very, very slow at deleting a large number of files
+because it insists on enumerating them and reporting to the user first.
+It is much faster to use the batch file [`fastdelete.bat`](https://github.com/Ian-Parberry/stompdisk/blob/a76397f792715d5f9aa203c319b7312ef2874ce8/fastdelete.bat) included at
+the root of this repository. Simply copy it to the folder above
+the one you want to delete, double-click on the [`fastdelete.bat`](https://github.com/Ian-Parberry/stompdisk/blob/a76397f792715d5f9aa203c319b7312ef2874ce8/fastdelete.bat) icon
+(see \ref fig4 "Fig. 4"),
+and type in the name of the folder that you want to delete when prompted
+(in \ref fig4 "Fig. 4" that would be the folder `Delete Me`). 
+ Note that these files cannot be undeleted, so make
+sure that you do _really_ want to do this.
+You should also
 uninstall any unnecessary programs
 that may be caching data,
 clear all browser cookies and downloaded files, and 
 empty the trash.
-
-Unfortunately, Windows is very, very slow at deleting a large number of files
-because it insists on enumerating them and reporting to the user first.
-It is much faster to use the batch file `fastdelete.bat` included at
-the root of this repository. Simply copy it to the folder above
-the one you want to delete, double-click on the `fastdelete.bat` icon
-(see \ref fig4 "Fig. 4"),
-and type in the name of the folder that you want to delete when prompted
-(in \ref fig4 "Fig. 4" that would be the folder `Delete Me`).
-The contents of `fastdelete.bat` are as follows:
-
-https://github.com/Ian-Parberry/stompdisk/blob/a76397f792715d5f9aa203c319b7312ef2874ce8/fastdelete.bat#L1-L14
 
 \anchor fig4
 \image html deleteme.png "Fig. 4: Folder containing the fast delete batch file." width=40%
