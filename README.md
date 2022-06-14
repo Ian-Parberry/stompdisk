@@ -1,7 +1,7 @@
 # stompdisk
 
 
-<img src="https://github.com/Ian-Parberry/stompdisk/blob/main/logo300.png" alt="Logo."  width="35%"/>
+<img src="https://github.com/Ian-Parberry/stompdisk/blob/main/logo300.png" alt="Logo."  width="25%"/>
 
 A program for Windows that creates hugemungous files of zeros very, very fast.
 Created and maintained
