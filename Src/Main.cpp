@@ -1,6 +1,5 @@
 /// \file Main.cpp
-/// \brief The only code file.
-
+/// \brief Main.
 
 // MIT License
 //
@@ -30,6 +29,8 @@
 #include <iostream>
 #include <sstream>
 
+#include "shishua.h"
+
 #include "Windows.h"
 
 /// \brief File exists.
@@ -55,7 +56,7 @@ void GetNextFile(uint64_t& n, std::wstring& wstrFileName){
   bool bExists = false;
 
   do{
-    wstrFileName = L"stomp" + std::to_wstring(n) + L".bin"; //file name
+    wstrFileName = L"stomp" + std::to_wstring(n) + L".dat"; //file name
     bExists = FileExists(wstrFileName);
     if(bExists)n++;
   }while(bExists);
@@ -91,92 +92,50 @@ uint64_t ReadNumber(std::wstring wstrBanner){
   return n;
 } //ReadNumber
 
-/// \brief Get error string.
-///
-/// Convert `DWORD` error code into `std::wstring` describing the error.
-/// \param dw Error code.
-/// \return Error string.
-
-std::wstring GetErrorString(const DWORD dw){ 
-  LPVOID lpMsgBuf = nullptr; //message buffer for Windows API function
-
-  FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | //get error message to lpMsgBuf
-    FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, 0, dw,
-    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR) &lpMsgBuf, 0, 0);
-
-  std::wstring wstr((LPTSTR) &lpMsgBuf); //convert to wstring
-  LocalFree(lpMsgBuf); //free the message buffer
-  return wstr;
-} //GetErrorString
-
-/// \brief Create files of zeros.
-///
-/// Create large file filled with zeros super-fast under Windows.
-/// \param nWanted [in] Number of GB wanted.
-/// \param nCreated [out] Number of GB actually created.
-/// \param wstrFile [out] Name of file created.
-/// \return DWORD error code, zero if no error.
-
-DWORD Stomp(const uint64_t nWanted, uint64_t& nCreated, std::wstring& wstrFile){
-  const uint64_t nBytesInGB = 1073741824; //bytes in a gigabyte
-  const uint64_t nBytes = nBytesInGB*nWanted; //convert GB to bytes
-  LARGE_INTEGER nSize; //thanks for being weird, Microsoft
-  nSize.QuadPart = nBytes; //convert to bytes
-  DWORD dwErr = 0; //error code, initially no error
-  uint64_t nFileNum = 0; //number in file name
-
-  GetNextFile(nFileNum, wstrFile); //next file number and name
-
-  const HANDLE hFile = CreateFile(wstrFile.c_str(), GENERIC_WRITE,
-    FILE_SHARE_WRITE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-  dwErr = GetLastError(); //check for error
-
-  if(SUCCEEDED(dwErr)){ //file has been opened, hFile is valid
-    SetFilePointerEx(hFile, nSize, 0, FILE_BEGIN); //set file ptr to start
-    dwErr = GetLastError(); //check for error
-
-    if(SUCCEEDED(dwErr)){ //no error
-      SetEndOfFile(hFile); 
-      dwErr = GetLastError(); //check for error
-    } //if
-    GetFileSizeEx(hFile, &nSize); //read back file size
-    nCreated = nSize.QuadPart/nBytesInGB; //report back file size
-
-    CloseHandle(hFile); //close valid file handle
-  } //if
-
-  return dwErr; //error code, zero if no error
-} //Stomp
-
 /// \brief Main.
 ///
-/// Get number of files and file size from user and create the files. Print
-/// an error string if something went wrong.
+/// Get the file size from `stdin` and create a file of that many GB of
+/// pseudo-random numbers.
 /// \return 0 (What could possibly go wrong?)
 
 int main(){
-  std::wcout << L"StompDisk: Create a large file of zeros very very fast.\n";
+  std::cout << "Create a large file of pseudo-random numbers fast." << std::endl;
+  const size_t nBufSize = 1073741824; //1GB buffer
+  uint8_t* buffer = new uint8_t[nBufSize]; //buffer for pseudo-random numbers
 
-  uint64_t nWanted = 0; //number of GB wanted
-  uint64_t nCreated = 0; //number of GB in created file
-  std::wstring wstr; //for file name
+  prng_state s; //state for shishua
+  uint64_t seed[4] = { //fixed seed
+    0x3E98AE8642DA6EB2, 0x38CAE9E0E8EE1DC8,
+    0xE467429564D76059, 0x8D5E4262F6EB46AD};
 
-  while(nWanted == 0) //get nWanted from user
-    nWanted = ReadNumber(L"Enter file size in GB: ");
+  prng_init(&s, seed); //initialize shishua
 
-  const DWORD dwErr = Stomp(nWanted, nCreated, wstr); //create file
+  uint64_t n = 0; //file size in GB
+  while(n == 0) //get n from user
+    n = ReadNumber(L"Enter file size in GB: ");
 
-  if(SUCCEEDED(dwErr)){ //no error reported, check size to be sure
-    std::wcout << L"Created " << nCreated << L" GB file " << wstr << std::endl;
+  uint64_t nFile = 0; //output file number
+  std::wstring wstrFile; //output file name
+  GetNextFile(nFile, wstrFile); //get next output file number and name
+
+  FILE* output = nullptr; //output file pointer
+  _wfopen_s(&output, wstrFile.c_str(), L"wb"); //open output file for writing
+
+  if(output == 0) //open failed
+    std::cout << "Error opening file." << std::endl;
+  
+  else{ //output file opened successfully
+    for(uint64_t i=0; i<n; i++){ //once for each GB of output
+      prng_gen(&s, buffer, nBufSize); //generate 1GB using shishua
+      fwrite(buffer, nBufSize, 1, output); //write to disk
+      std::cout << "."; //to show user progress
+    } //for
     
-    if(nCreated != nWanted)
-      std::wcout << L"Error: Something went wrong!" << std::endl;
+    std::cout << std::endl;
+    fclose(output);
   } //if
 
-  else{ //error report
-    std::wcout << L"Error!" << std::endl;
-    std::wcout << GetErrorString(dwErr);
-  } //if
+  delete [] buffer;
 
   system("pause"); //wait for user
 

@@ -31,7 +31,7 @@ MathJax.Hub.Config({
   <td id="projectalign">
    <div id="projectname">StompDisk
    </div>
-   <div id="projectbrief">Create Hugemungous Files of Zeros Fast</div>
+   <div id="projectbrief">Create Large Files of Noise fast</div>
   </td>
  </tr>
  </tbody>
@@ -69,6 +69,10 @@ $(function() {
 </iframe>
 </div>
 
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_413f4e031a85da0d68269c6fd2f76e1c.html">Src</a></li>  </ul>
+</div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
@@ -77,13 +81,14 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>The only code file.  
+<p>Main.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;cstdio&gt;</code><br />
 <code>#include &lt;cstdint&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
 <code>#include &lt;iostream&gt;</code><br />
 <code>#include &lt;sstream&gt;</code><br />
+<code>#include &quot;shishua.h&quot;</code><br />
 <code>#include &quot;Windows.h&quot;</code><br />
 </div>
 <p><a href="_main_8cpp_source.html">Go to the source code of this file.</a></p>
@@ -102,12 +107,6 @@ Functions</h2></td></tr>
 <tr class="memitem:a3916e83045ec6c03ddd9e6f767f7e9c3"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_main_8cpp.html#a3916e83045ec6c03ddd9e6f767f7e9c3">ReadNumber</a> (std::wstring wstrBanner)</td></tr>
 <tr class="memdesc:a3916e83045ec6c03ddd9e6f767f7e9c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read a number.  <a href="_main_8cpp.html#a3916e83045ec6c03ddd9e6f767f7e9c3">More...</a><br /></td></tr>
 <tr class="separator:a3916e83045ec6c03ddd9e6f767f7e9c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a989d37d6482ecfdc74ce1620eacff1fa"><td class="memItemLeft" align="right" valign="top">std::wstring&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_main_8cpp.html#a989d37d6482ecfdc74ce1620eacff1fa">GetErrorString</a> (const DWORD dw)</td></tr>
-<tr class="memdesc:a989d37d6482ecfdc74ce1620eacff1fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get error string.  <a href="_main_8cpp.html#a989d37d6482ecfdc74ce1620eacff1fa">More...</a><br /></td></tr>
-<tr class="separator:a989d37d6482ecfdc74ce1620eacff1fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7fabb349fef76b7b134246afe1233479"><td class="memItemLeft" align="right" valign="top">DWORD&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_main_8cpp.html#a7fabb349fef76b7b134246afe1233479">Stomp</a> (const uint64_t nWanted, uint64_t &amp;nCreated, std::wstring &amp;wstrFile)</td></tr>
-<tr class="memdesc:a7fabb349fef76b7b134246afe1233479"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create files of zeros.  <a href="_main_8cpp.html#a7fabb349fef76b7b134246afe1233479">More...</a><br /></td></tr>
-<tr class="separator:a7fabb349fef76b7b134246afe1233479"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae66f6b31b5ad750f1fe042a706a4e3d4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_main_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a> ()</td></tr>
 <tr class="memdesc:ae66f6b31b5ad750f1fe042a706a4e3d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Main.  <a href="_main_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">More...</a><br /></td></tr>
 <tr class="separator:ae66f6b31b5ad750f1fe042a706a4e3d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -136,34 +135,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if the file exists. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_main_8cpp_source.html#l00018">18</a> of file <a class="el" href="_main_8cpp_source.html">Main.cpp</a>.</p>
-
-</div>
-</div>
-<a id="a989d37d6482ecfdc74ce1620eacff1fa" name="a989d37d6482ecfdc74ce1620eacff1fa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a989d37d6482ecfdc74ce1620eacff1fa">&#9670;&nbsp;</a></span>GetErrorString()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::wstring GetErrorString </td>
-          <td>(</td>
-          <td class="paramtype">const DWORD&#160;</td>
-          <td class="paramname"><em>dw</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p >Convert <code>DWORD</code> error code into <code>std::wstring</code> describing the error. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">dw</td><td>Error code. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Error string. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="_main_8cpp_source.html#l00077">77</a> of file <a class="el" href="_main_8cpp_source.html">Main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_main_8cpp_source.html#l00042">42</a> of file <a class="el" href="_main_8cpp_source.html">Main.cpp</a>.</p>
 
 </div>
 </div>
@@ -200,7 +172,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_main_8cpp_source.html#l00031">31</a> of file <a class="el" href="_main_8cpp_source.html">Main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_main_8cpp_source.html#l00055">55</a> of file <a class="el" href="_main_8cpp_source.html">Main.cpp</a>.</p>
 
 </div>
 </div>
@@ -227,7 +199,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if the string is a numeric string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_main_8cpp_source.html#l00048">48</a> of file <a class="el" href="_main_8cpp_source.html">Main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_main_8cpp_source.html#l00072">72</a> of file <a class="el" href="_main_8cpp_source.html">Main.cpp</a>.</p>
 
 </div>
 </div>
@@ -245,9 +217,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p >Get number of files and file size from user and create the files. Print an error string if something went wrong. </p><dl class="section return"><dt>Returns</dt><dd>0 (What could possibly go wrong?) </dd></dl>
+<p >Get the file size from <code>stdin</code> and create a file of that many GB of pseudo-random numbers. </p><dl class="section return"><dt>Returns</dt><dd>0 (What could possibly go wrong?) </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_main_8cpp_source.html#l00134">134</a> of file <a class="el" href="_main_8cpp_source.html">Main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_main_8cpp_source.html#l00101">101</a> of file <a class="el" href="_main_8cpp_source.html">Main.cpp</a>.</p>
 
 </div>
 </div>
@@ -274,59 +246,14 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The number input, equal to zero if something goes wrong. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_main_8cpp_source.html#l00058">58</a> of file <a class="el" href="_main_8cpp_source.html">Main.cpp</a>.</p>
-
-</div>
-</div>
-<a id="a7fabb349fef76b7b134246afe1233479" name="a7fabb349fef76b7b134246afe1233479"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7fabb349fef76b7b134246afe1233479">&#9670;&nbsp;</a></span>Stomp()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">DWORD Stomp </td>
-          <td>(</td>
-          <td class="paramtype">const uint64_t&#160;</td>
-          <td class="paramname"><em>nWanted</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint64_t &amp;&#160;</td>
-          <td class="paramname"><em>nCreated</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::wstring &amp;&#160;</td>
-          <td class="paramname"><em>wstrFile</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p >Create large file filled with zeros super-fast under Windows. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">nWanted</td><td>[in] Number of GB wanted. </td></tr>
-    <tr><td class="paramname">nCreated</td><td>[out] Number of GB actually created. </td></tr>
-    <tr><td class="paramname">wstrFile</td><td>[out] Name of file created. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>DWORD error code, zero if no error. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="_main_8cpp_source.html#l00097">97</a> of file <a class="el" href="_main_8cpp_source.html">Main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_main_8cpp_source.html#l00082">82</a> of file <a class="el" href="_main_8cpp_source.html">Main.cpp</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jun 13 2022 18:41:50 for StompDisk by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Mon Jun 20 2022 15:33:44 for StompDisk by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>
