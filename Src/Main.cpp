@@ -23,15 +23,20 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
-#include <cstdio>
+//Winmm.lib
+
+#include "Windows.h"
+
 #include <cstdint>
+#include <cstdlib>
+
+#include <cinttypes>
 #include <string>
+
 #include <iostream>
 #include <sstream>
 
 #include "shishua.h"
-
-#include "Windows.h"
 
 /// \brief File exists.
 ///
@@ -42,6 +47,7 @@
 bool FileExists(const std::wstring& wstrFileName){
   const DWORD dw = GetFileAttributesW(wstrFileName.c_str());
   return dw != INVALID_FILE_ATTRIBUTES && !(dw & FILE_ATTRIBUTE_DIRECTORY);
+  return false;
 } //FileExists
 
 /// \brief Get next file number and name.
@@ -99,14 +105,18 @@ uint64_t ReadNumber(std::wstring wstrBanner){
 /// \return 0 (What could possibly go wrong?)
 
 int main(){
-  std::cout << "Create a large file of pseudo-random numbers fast." << std::endl;
+  std::cout << "Create a large file of pseudo-random bytes." << std::endl;
   const size_t nBufSize = 1073741824; //1GB buffer
   uint8_t* buffer = new uint8_t[nBufSize]; //buffer for pseudo-random numbers
 
   prng_state s; //state for shishua
-  uint64_t seed[4] = { //fixed seed
-    0x3E98AE8642DA6EB2, 0x38CAE9E0E8EE1DC8,
-    0xE467429564D76059, 0x8D5E4262F6EB46AD};
+  uint64_t seed[4] = {0}; //seed for shishua
+
+  srand(timeGetTime());
+
+  for(int i=0; i<4; i++)
+    seed[i] = uint64_t(rand()) << 48 | uint64_t(rand()) << 32 |
+      uint64_t(rand()) << 16 | uint64_t(rand());
 
   prng_init(&s, seed); //initialize shishua
 
@@ -128,6 +138,7 @@ int main(){
     for(uint64_t i=0; i<n; i++){ //once for each GB of output
       prng_gen(&s, buffer, nBufSize); //generate 1GB using shishua
       fwrite(buffer, nBufSize, 1, output); //write to disk
+      fflush(output);
       std::cout << "."; //to show user progress
     } //for
     
