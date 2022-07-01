@@ -13,10 +13,16 @@ Until that disk space is actually over-written by another file,
 a moderately competent hacker with access to your old disk drive
 could potentially reconstruct your files. This means that
 before you sell, give away, or throw out your old computer or your old disk drive,
-it's a good idea to over-write as much of the data on the disc as you can with noise.
+it's a good idea to over-write as much of the data on the disk as you can with noise.
+
 For _noise_ this program uses the pseudo-random number generator
-[shishua](https://github.com/espadrine/shishua) with
-a fixed seed.
+[`shishua`](https://github.com/espadrine/shishua), which was chosen for speed of
+generation over statistical strength.
+`StompDisk`'s `Src` folder contains unmodifed copies of
+`shishua.h` and `shishua-sse2.h` from that repository.
+The initial seed for `shishua` is generated from using `cstdlib` function `rand()`
+seeded using `timeGetTime()`, the number of milliseconds since Windows last
+rebooted, so that the output should be different every time `StompDisk` is run.
 
 ## 2. Compiling the Code
 
@@ -31,6 +37,9 @@ If you already have some files named `stomp*.dat` in the current
 folder, then they will not be over-written. The \ref fig1 "Fig. 1" below shows a screen shot.
 Note that after you enter the number of GB wanted, `StompDisk` outputs a "."
 for every GB saved so that you can monitor its progress.
+The execution time will depend on several factors, the most important of which is the disk transfer rate.
+Obviously, `StompDisk` should run faster on a new solid-state drive than
+on an old-school mechanical hard drive.  
 
 \anchor fig1
 \image html sshot.png "Fig. 1: Screen shot of StompDisk." width=40%
@@ -38,7 +47,7 @@ for every GB saved so that you can monitor its progress.
 It is _strongly recommended_ that you do not open any of the `stomp*.dat`
 files in a text editor such as `Notepad` or `Notepad++` unless you
 are willing to wait a very, very long time for it to load.
-If you want to check one of the output files to see that it contains zeros,
+If you want to check one of the output files,
 I suggest that you use
 the free hex editor [HxD](https://mh-nexus.de/en/hxd/).
 For example, \ref fig2 "Fig. 2" shows `stomp0.dat` open in 
@@ -52,6 +61,12 @@ For example, \ref fig2 "Fig. 2" shows `stomp0.dat` open in
 Before you dispose of your disk drive or computer,
 you should of course delete all of your files from the usual places
 such as the `Documents` and `Pictures` folders.
+You should also
+uninstall any unnecessary programs
+that may be caching data,
+clear all browser cookies and downloaded files, and 
+empty the trash.
+
 Unfortunately, Windows is very, very slow at deleting a large number of files
 because it insists on enumerating them and reporting to the user first.
 It is much faster to use the batch file [`fastdelete.bat`](https://github.com/Ian-Parberry/stompdisk/blob/a76397f792715d5f9aa203c319b7312ef2874ce8/fastdelete.bat) included at
@@ -60,13 +75,8 @@ the one you want to delete, double-click on the [`fastdelete.bat`](https://githu
 (see \ref fig3 "Fig. 3"),
 and type in the name of the folder that you want to delete when prompted
 (in \ref fig3 "Fig. 3" that would be the folder `Delete Me`). 
- Note that these files cannot be undeleted, so make
+ Note that this cannot be undone, so make
 sure that you do _really_ want to do this.
-You should also
-uninstall any unnecessary programs
-that may be caching data,
-clear all browser cookies and downloaded files, and 
-empty the trash.
 
 \anchor fig3
 \image html deleteme.png "Fig. 3: Folder containing the fast delete batch file." width=40%
@@ -79,7 +89,7 @@ slow and tetchy as its main drive gets close to 100 percent usage.
 After, and only after,
 you have created enough `stomp*.dat` files to fill the disk you should delete them all,
 again preferably
-using `Shift+Delete`. Your unused disk space should now mostly consist of zeros.
+using `Shift+Delete`. Your unused disk space should now mostly consist of noise.
 
 <span style="color: red;">
 Important Note: `StompDisk` is not guaranteed to over-write absolutely all

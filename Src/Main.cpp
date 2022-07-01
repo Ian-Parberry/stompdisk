@@ -23,8 +23,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
-//Winmm.lib
-
 #include "Windows.h"
 
 #include <cstdint>
@@ -38,7 +36,7 @@
 
 #include "shishua.h"
 
-/// \brief File exists.
+/// \brief Test whether a file exists.
 ///
 /// Test whether a file exists.
 /// \param wstrFileName File name.
@@ -50,23 +48,27 @@ bool FileExists(const std::wstring& wstrFileName){
   return false;
 } //FileExists
 
-/// \brief Get next file number and name.
+/// \brief Get next file name.
 ///
 /// This function is used to get the next unused file name, where the file
-/// name is a string followed by a number. If the first such file exists, then
-/// the number is incremented until the file does not exist.
-/// \param n [in, out] Next unused file number.
-/// \param wstrFileName [out] File name.
+/// name consists of the string `stomp` followed by a number, with extension
+/// `.dat`. If the `stomp0.dat` exists, then the number is incremented until
+/// the file with that name does not exist.
+/// \return File name for a new (non-existent) file.
 
-void GetNextFile(uint64_t& n, std::wstring& wstrFileName){
-  bool bExists = false;
+std::wstring GetNextFileName(){
+  bool bExists = false; //true if file exists
+  uint64_t n = 0; //file number
+  std::wstring wstrFileName; //for file name
 
   do{
     wstrFileName = L"stomp" + std::to_wstring(n) + L".dat"; //file name
     bExists = FileExists(wstrFileName);
     if(bExists)n++;
   }while(bExists);
-} //GetNextFile
+
+  return wstrFileName;
+} //GetNextFileName
 
 /// \brief Numeric string test.
 ///
@@ -81,9 +83,11 @@ bool IsNumericString(const std::wstring& s){
 
 /// \brief Read a number.
 ///
-/// Prompt the user and then read an unsigned 64-bit number from `std::wcin`.
+/// Prompt the user and read an unsigned 64-bit number from `std::wcin`.
+/// If the user enters a non-numeric character (that is, other than the digits
+/// `0` through `9`), then the return defaults to zero.
 /// \param wstrBanner Banner to print before reading the number.
-/// \return The number input, equal to zero if something goes wrong.
+/// \return The number read, defaults to zero.
 
 uint64_t ReadNumber(std::wstring wstrBanner){
   std::wcout << wstrBanner << std::endl << "> ";
@@ -98,47 +102,74 @@ uint64_t ReadNumber(std::wstring wstrBanner){
   return n;
 } //ReadNumber
 
-/// \brief Main.
+/// \brief Read the file size.
 ///
-/// Get the file size from `stdin` and create a file of that many GB of
-/// pseudo-random numbers.
-/// \return 0 (What could possibly go wrong?)
+/// Prompt the user for a file size, repeating the request as necessary until
+/// a non-zero number is read.
+/// \return A non-zero file size.
 
-int main(){
-  std::cout << "Create a large file of pseudo-random bytes." << std::endl;
-  const size_t nBufSize = 1073741824; //1GB buffer
-  uint8_t* buffer = new uint8_t[nBufSize]; //buffer for pseudo-random numbers
+uint64_t ReadFileSize(){
+  uint64_t n = 0; //file size in GB
 
-  prng_state s; //state for shishua
-  uint64_t seed[4] = {0}; //seed for shishua
+  while(n == 0) //get nonzero n from user
+    n = ReadNumber(L"Enter file size in GB: ");
+  return n;
+} //ReadFileSize
 
+/// \brief Generate a pseudo-random `shishua` seed.
+///
+/// Generate a pseudo-random `shishua` seed using the `cstdlib` function `rand()`
+/// seeded using `timeGetTime()`, the number of milliseconds since Windows last
+/// rebooted. Since `rand()` returns a 16-bit result, each 64-bit part of the
+/// seed is constructed using four calls to `rand()` shifted appropriately.
+/// \param seed [out] A `shishua` seed.
+
+void GenerateShiShuaSeed(uint64_t seed[4]){
   srand(timeGetTime());
 
   for(int i=0; i<4; i++)
     seed[i] = uint64_t(rand()) << 48 | uint64_t(rand()) << 32 |
       uint64_t(rand()) << 16 | uint64_t(rand());
+} //GenerateShiShuaSeed
 
-  prng_init(&s, seed); //initialize shishua
+/// \brief Generate a pseudo-random `shishua` state.
+///
+/// Generate a `shishua` state with a pseudo-random seed.
+/// \return A `shishua` pseudo-random seed.
 
-  uint64_t n = 0; //file size in GB
-  while(n == 0) //get n from user
-    n = ReadNumber(L"Enter file size in GB: ");
+prng_state GenerateShiShuaState(){
+  prng_state s; //state for shishua
 
-  uint64_t nFile = 0; //output file number
-  std::wstring wstrFile; //output file name
-  GetNextFile(nFile, wstrFile); //get next output file number and name
+  uint64_t seed[4] = {0}; //seed for shishua
+  GenerateShiShuaSeed(seed); //generate seed
+  prng_init(&s, seed); //initialize shishua state with seed
+
+  return s;
+} //InitializeShiShuaState
+
+/// \brief Generate a file of pseudo-random bytes.
+///
+/// Generate a file of pseudo-random bytes using `shishua`. Assumes that `shishua`
+/// has been initialized and seeded.
+/// \param wstrFile Output file name.
+/// \param n Number of GB of output.
+/// \param pState Pointer to `shishua` state.
+
+void GenerateFile(const std::wstring& wstrFile, size_t n, prng_state* pState){
+  const size_t nBufSize = 1073741824; //1GB buffer
+  uint8_t* buffer = new uint8_t[nBufSize]; //output buffer
 
   FILE* output = nullptr; //output file pointer
-  _wfopen_s(&output, wstrFile.c_str(), L"wb"); //open output file for writing
+  _wfopen_s(&output, wstrFile.c_str(), L"wb"); 
 
   if(output == 0) //open failed
     std::cout << "Error opening file." << std::endl;
   
   else{ //output file opened successfully
     for(uint64_t i=0; i<n; i++){ //once for each GB of output
-      prng_gen(&s, buffer, nBufSize); //generate 1GB using shishua
+      prng_gen(pState, buffer, nBufSize); //generate 1GB using shishua
       fwrite(buffer, nBufSize, 1, output); //write to disk
-      fflush(output);
+      fflush(output); //flush
       std::cout << "."; //to show user progress
     } //for
     
@@ -147,8 +178,23 @@ int main(){
   } //if
 
   delete [] buffer;
+} //GenerateFile
 
-  system("pause"); //wait for user
+/// \brief Main.
+///
+/// Prompt the user for a file size and create a file of that many GB of
+/// pseudo-random noise.
+/// \return 0 (What could possibly go wrong?)
+
+int main(){
+  std::cout << "Create a large file of pseudo-random bytes." << std::endl;
+
+  prng_state s = GenerateShiShuaState(); //shishua state
+  uint64_t n = ReadFileSize(); //file size in GB
+  std::wstring wstrFileName = GetNextFileName(); //output file name
+
+  GenerateFile(wstrFileName, n, &s); //generate and save the file
+  system("pause"); //wait for user response
 
   return 0; //what could possibly go wrong?
 } //main

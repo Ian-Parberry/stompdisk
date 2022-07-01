@@ -31,7 +31,7 @@ MathJax.Hub.Config({
   <td id="projectalign">
    <div id="projectname">StompDisk
    </div>
-   <div id="projectbrief">Create Large Files of Noise fast</div>
+   <div id="projectbrief">Create Large Files of Pseudo-Random Bytes</div>
   </td>
  </tr>
  </tbody>
@@ -83,30 +83,43 @@ $(function() {
 
 <p>Main.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;cstdio&gt;</code><br />
+<div class="textblock"><code>#include &quot;Windows.h&quot;</code><br />
 <code>#include &lt;cstdint&gt;</code><br />
+<code>#include &lt;cstdlib&gt;</code><br />
+<code>#include &lt;cinttypes&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
 <code>#include &lt;iostream&gt;</code><br />
 <code>#include &lt;sstream&gt;</code><br />
 <code>#include &quot;shishua.h&quot;</code><br />
-<code>#include &quot;Windows.h&quot;</code><br />
 </div>
 <p><a href="_main_8cpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a83755ee34598179eaf4107f56e6dd23d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_main_8cpp.html#a83755ee34598179eaf4107f56e6dd23d">FileExists</a> (const std::wstring &amp;wstrFileName)</td></tr>
-<tr class="memdesc:a83755ee34598179eaf4107f56e6dd23d"><td class="mdescLeft">&#160;</td><td class="mdescRight">File exists.  <a href="_main_8cpp.html#a83755ee34598179eaf4107f56e6dd23d">More...</a><br /></td></tr>
+<tr class="memdesc:a83755ee34598179eaf4107f56e6dd23d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test whether a file exists.  <a href="_main_8cpp.html#a83755ee34598179eaf4107f56e6dd23d">More...</a><br /></td></tr>
 <tr class="separator:a83755ee34598179eaf4107f56e6dd23d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1e445d4eba0a6ae6a770205937567e48"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_main_8cpp.html#a1e445d4eba0a6ae6a770205937567e48">GetNextFile</a> (uint64_t &amp;n, std::wstring &amp;wstrFileName)</td></tr>
-<tr class="memdesc:a1e445d4eba0a6ae6a770205937567e48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get next file number and name.  <a href="_main_8cpp.html#a1e445d4eba0a6ae6a770205937567e48">More...</a><br /></td></tr>
-<tr class="separator:a1e445d4eba0a6ae6a770205937567e48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3977a0ba7e90137f79f620de0dbc6d0"><td class="memItemLeft" align="right" valign="top">std::wstring&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_main_8cpp.html#ac3977a0ba7e90137f79f620de0dbc6d0">GetNextFileName</a> ()</td></tr>
+<tr class="memdesc:ac3977a0ba7e90137f79f620de0dbc6d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get next file name.  <a href="_main_8cpp.html#ac3977a0ba7e90137f79f620de0dbc6d0">More...</a><br /></td></tr>
+<tr class="separator:ac3977a0ba7e90137f79f620de0dbc6d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acf0ca0479f815382c5b6c13c4b38b127"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_main_8cpp.html#acf0ca0479f815382c5b6c13c4b38b127">IsNumericString</a> (const std::wstring &amp;s)</td></tr>
 <tr class="memdesc:acf0ca0479f815382c5b6c13c4b38b127"><td class="mdescLeft">&#160;</td><td class="mdescRight">Numeric string test.  <a href="_main_8cpp.html#acf0ca0479f815382c5b6c13c4b38b127">More...</a><br /></td></tr>
 <tr class="separator:acf0ca0479f815382c5b6c13c4b38b127"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3916e83045ec6c03ddd9e6f767f7e9c3"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_main_8cpp.html#a3916e83045ec6c03ddd9e6f767f7e9c3">ReadNumber</a> (std::wstring wstrBanner)</td></tr>
 <tr class="memdesc:a3916e83045ec6c03ddd9e6f767f7e9c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read a number.  <a href="_main_8cpp.html#a3916e83045ec6c03ddd9e6f767f7e9c3">More...</a><br /></td></tr>
 <tr class="separator:a3916e83045ec6c03ddd9e6f767f7e9c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabb68ebf259abc0dcb4dbd32b67eaef0"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_main_8cpp.html#aabb68ebf259abc0dcb4dbd32b67eaef0">ReadFileSize</a> ()</td></tr>
+<tr class="memdesc:aabb68ebf259abc0dcb4dbd32b67eaef0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the file size.  <a href="_main_8cpp.html#aabb68ebf259abc0dcb4dbd32b67eaef0">More...</a><br /></td></tr>
+<tr class="separator:aabb68ebf259abc0dcb4dbd32b67eaef0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06313377d54ff27d7d477088ec87f28f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_main_8cpp.html#a06313377d54ff27d7d477088ec87f28f">GenerateShiShuaSeed</a> (uint64_t seed[4])</td></tr>
+<tr class="memdesc:a06313377d54ff27d7d477088ec87f28f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate a pseudo-random <code>shishua</code> seed.  <a href="_main_8cpp.html#a06313377d54ff27d7d477088ec87f28f">More...</a><br /></td></tr>
+<tr class="separator:a06313377d54ff27d7d477088ec87f28f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99b39fe85f22703afb052a642cc6d90b"><td class="memItemLeft" align="right" valign="top">prng_state&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_main_8cpp.html#a99b39fe85f22703afb052a642cc6d90b">GenerateShiShuaState</a> ()</td></tr>
+<tr class="memdesc:a99b39fe85f22703afb052a642cc6d90b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate a pseudo-random <code>shishua</code> state.  <a href="_main_8cpp.html#a99b39fe85f22703afb052a642cc6d90b">More...</a><br /></td></tr>
+<tr class="separator:a99b39fe85f22703afb052a642cc6d90b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc233c8682c554fb6d6a014ec0800cd9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_main_8cpp.html#acc233c8682c554fb6d6a014ec0800cd9">GenerateFile</a> (const std::wstring &amp;wstrFile, size_t n, prng_state *pState)</td></tr>
+<tr class="memdesc:acc233c8682c554fb6d6a014ec0800cd9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate a file of pseudo-random bytes.  <a href="_main_8cpp.html#acc233c8682c554fb6d6a014ec0800cd9">More...</a><br /></td></tr>
+<tr class="separator:acc233c8682c554fb6d6a014ec0800cd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae66f6b31b5ad750f1fe042a706a4e3d4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_main_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a> ()</td></tr>
 <tr class="memdesc:ae66f6b31b5ad750f1fe042a706a4e3d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Main.  <a href="_main_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">More...</a><br /></td></tr>
 <tr class="separator:ae66f6b31b5ad750f1fe042a706a4e3d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -135,27 +148,33 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if the file exists. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_main_8cpp_source.html#l00042">42</a> of file <a class="el" href="_main_8cpp_source.html">Main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_main_8cpp_source.html#l00045">45</a> of file <a class="el" href="_main_8cpp_source.html">Main.cpp</a>.</p>
 
 </div>
 </div>
-<a id="a1e445d4eba0a6ae6a770205937567e48" name="a1e445d4eba0a6ae6a770205937567e48"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1e445d4eba0a6ae6a770205937567e48">&#9670;&nbsp;</a></span>GetNextFile()</h2>
+<a id="acc233c8682c554fb6d6a014ec0800cd9" name="acc233c8682c554fb6d6a014ec0800cd9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc233c8682c554fb6d6a014ec0800cd9">&#9670;&nbsp;</a></span>GenerateFile()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void GetNextFile </td>
+          <td class="memname">void GenerateFile </td>
           <td>(</td>
-          <td class="paramtype">uint64_t &amp;&#160;</td>
+          <td class="paramtype">const std::wstring &amp;&#160;</td>
+          <td class="paramname"><em>wstrFile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::wstring &amp;&#160;</td>
-          <td class="paramname"><em>wstrFileName</em>&#160;</td>
+          <td class="paramtype">prng_state *&#160;</td>
+          <td class="paramname"><em>pState</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -164,15 +183,82 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p >This function is used to get the next unused file name, where the file name is a string followed by a number. If the first such file exists, then the number is incremented until the file does not exist. </p><dl class="params"><dt>Parameters</dt><dd>
+<p >Generate a file of pseudo-random bytes using <code>shishua</code>. Assumes that <code>shishua</code> has been initialized and seeded. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">n</td><td>[in, out] Next unused file number. </td></tr>
-    <tr><td class="paramname">wstrFileName</td><td>[out] File name. </td></tr>
+    <tr><td class="paramname">wstrFile</td><td>Output file name. </td></tr>
+    <tr><td class="paramname">n</td><td>Number of GB of output. </td></tr>
+    <tr><td class="paramname">pState</td><td>Pointer to <code>shishua</code> state. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_main_8cpp_source.html#l00055">55</a> of file <a class="el" href="_main_8cpp_source.html">Main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_main_8cpp_source.html#l00158">158</a> of file <a class="el" href="_main_8cpp_source.html">Main.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a06313377d54ff27d7d477088ec87f28f" name="a06313377d54ff27d7d477088ec87f28f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06313377d54ff27d7d477088ec87f28f">&#9670;&nbsp;</a></span>GenerateShiShuaSeed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GenerateShiShuaSeed </td>
+          <td>(</td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>seed</em>[4]</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Generate a pseudo-random <code>shishua</code> seed using the <code>cstdlib</code> function <code>rand()</code> seeded using <code>timeGetTime()</code>, the number of milliseconds since Windows last rebooted. Since <code>rand()</code> returns a 16-bit result, each 64-bit part of the seed is constructed using four calls to <code>rand()</code> shifted appropriately. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">seed</td><td>[out] A <code>shishua</code> seed. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="_main_8cpp_source.html#l00127">127</a> of file <a class="el" href="_main_8cpp_source.html">Main.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a99b39fe85f22703afb052a642cc6d90b" name="a99b39fe85f22703afb052a642cc6d90b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99b39fe85f22703afb052a642cc6d90b">&#9670;&nbsp;</a></span>GenerateShiShuaState()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">prng_state GenerateShiShuaState </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Generate a <code>shishua</code> state with a pseudo-random seed. </p><dl class="section return"><dt>Returns</dt><dd>A <code>shishua</code> pseudo-random seed. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="_main_8cpp_source.html#l00140">140</a> of file <a class="el" href="_main_8cpp_source.html">Main.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ac3977a0ba7e90137f79f620de0dbc6d0" name="ac3977a0ba7e90137f79f620de0dbc6d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3977a0ba7e90137f79f620de0dbc6d0">&#9670;&nbsp;</a></span>GetNextFileName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::wstring GetNextFileName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >This function is used to get the next unused file name, where the file name consists of the string <code>stomp</code> followed by a number, with extension <code>.dat</code>. If the <code>stomp0.dat</code> exists, then the number is incremented until the file with that name does not exist. </p><dl class="section return"><dt>Returns</dt><dd>File name for a new (non-existent) file. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="_main_8cpp_source.html#l00059">59</a> of file <a class="el" href="_main_8cpp_source.html">Main.cpp</a>.</p>
 
 </div>
 </div>
@@ -199,7 +285,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if the string is a numeric string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_main_8cpp_source.html#l00072">72</a> of file <a class="el" href="_main_8cpp_source.html">Main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_main_8cpp_source.html#l00080">80</a> of file <a class="el" href="_main_8cpp_source.html">Main.cpp</a>.</p>
 
 </div>
 </div>
@@ -217,9 +303,29 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p >Get the file size from <code>stdin</code> and create a file of that many GB of pseudo-random numbers. </p><dl class="section return"><dt>Returns</dt><dd>0 (What could possibly go wrong?) </dd></dl>
+<p >Prompt the user for a file size and create a file of that many GB of pseudo-random noise. </p><dl class="section return"><dt>Returns</dt><dd>0 (What could possibly go wrong?) </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_main_8cpp_source.html#l00101">101</a> of file <a class="el" href="_main_8cpp_source.html">Main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_main_8cpp_source.html#l00189">189</a> of file <a class="el" href="_main_8cpp_source.html">Main.cpp</a>.</p>
+
+</div>
+</div>
+<a id="aabb68ebf259abc0dcb4dbd32b67eaef0" name="aabb68ebf259abc0dcb4dbd32b67eaef0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aabb68ebf259abc0dcb4dbd32b67eaef0">&#9670;&nbsp;</a></span>ReadFileSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t ReadFileSize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Prompt the user for a file size, repeating the request as necessary until a non-zero number is read. </p><dl class="section return"><dt>Returns</dt><dd>A non-zero file size. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="_main_8cpp_source.html#l00111">111</a> of file <a class="el" href="_main_8cpp_source.html">Main.cpp</a>.</p>
 
 </div>
 </div>
@@ -238,22 +344,22 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p >Prompt the user and then read an unsigned 64-bit number from <code>std::wcin</code>. </p><dl class="params"><dt>Parameters</dt><dd>
+<p >Prompt the user and read an unsigned 64-bit number from <code>std::wcin</code>. If the user enters a non-numeric character (that is, other than the digits <code>0</code> through <code>9</code>), then the return defaults to zero. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">wstrBanner</td><td>Banner to print before reading the number. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The number input, equal to zero if something goes wrong. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The number read, defaults to zero. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_main_8cpp_source.html#l00082">82</a> of file <a class="el" href="_main_8cpp_source.html">Main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_main_8cpp_source.html#l00092">92</a> of file <a class="el" href="_main_8cpp_source.html">Main.cpp</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jun 20 2022 15:33:44 for StompDisk by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Fri Jul 1 2022 12:03:53 for StompDisk by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>
