@@ -11,7 +11,7 @@ could potentially reconstruct your files. This means that
 before you sell, give away, or throw out your old computer or your old disk drive,
 it's a good idea to over-write as much of the data on the disk as you can with noise.
 
-`StompDisk` program for Windows that creates hugemungous files of pseudo-random noise,
+`StompDisk` is a program for Windows that creates large files of pseudo-random noise,
 created and maintained
 by [Ian Parberry](http://ianparberry.com/).
 For instructions on how to compile and grok the code, read the Doxygen-generated
