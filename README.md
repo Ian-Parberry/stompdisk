@@ -1,4 +1,4 @@
-# stompdisk
+# StompDisk
 
 
 <img src="https://github.com/Ian-Parberry/stompdisk/blob/main/logo300.png" alt="Logo."  width="25%"/>
