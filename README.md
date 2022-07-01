@@ -5,9 +5,6 @@
 
 When you delete a file under Windows, the file data on disk doesn't get
 deleted, just the pointers that Windows uses to access the file.
-The data is still there, but its location on the disk
-has been added to a _free-list_
-of disk space available to be over-written by other files.
 Until that disk space is actually over-written by another file,
 a moderately competent hacker with access to your old disk drive
 could potentially reconstruct your files. This means that
